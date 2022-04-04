@@ -1,0 +1,4 @@
+29.3.2022 - Henri: Muutokset.txt lisätty, nyt jos pelaaja syöttää tyhjää lopettaa se koodin.
+29.3.2022 - Laura: Vähensin tikku-ukon arvaus/tulostuskertoja kahdeksaan,
+            Muokkasin Tulosta-luokkaa, lisäsin getVaaratArvaukset()-metodin if lauseisiin.
+31.3.2022 - Henri: aloita-komennon lisääminen.

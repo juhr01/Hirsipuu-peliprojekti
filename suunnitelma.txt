@@ -1,0 +1,9 @@
+Hirsipuu
+
+- 2 pelaajaa, toinen määrää listan sanoja, joista arvotaan arvattava sana.arvattava
+- Tulostetaan "ukko"
+- main-ohjelma käynnistää
+- Käyttöliittymä ohjaa peliä
+- Peli.java metodit
+- tulostus-luokka
+- pelin toimivuus (vapaaehtoinen)

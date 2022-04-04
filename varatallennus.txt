@@ -1,0 +1,320 @@
+
+import java.util.Scanner;
+
+public class Paaohjelma {
+
+    public static void main(String[] args) {
+        Peli peli = new Peli();
+        Scanner lukija = new Scanner(System.in);
+
+        Kayttoliittyma ui = new Kayttoliittyma(peli, lukija);
+        ui.kaynnista();
+    }
+}
+
+import java.util.Scanner;
+
+public class Peli {
+
+    private int laskuri;
+    private String viivat;
+    private String arvattavaSana;
+    private Scanner lukija;
+    private Tulosta tulosta;
+    private boolean sanaArvattu;
+
+    public Peli() {
+        this.laskuri = 0;
+        this.lukija = new Scanner(System.in);
+    }
+
+    public void aloitaPeli() {
+        this.arvattavaSana = Kayttoliittyma.sanalista.arvoSana();
+        this.viivat = new String(new char[this.arvattavaSana.length()]).replace("\0", "_");
+        this.sanaArvattu = false;
+        sanaViivoina();
+        while (true) {
+            System.out.println("Arvaa kirjain: ");
+            String arvaus = lukija.nextLine();
+            System.out.println("");
+            arvaa(arvaus);
+            System.out.println("");
+            if (this.sanaArvattu == true || getVaaratArvaukset() >= 8) {
+                break;
+            }
+        }
+    }
+
+    public void arvaa(String arvaus) {
+        String tarkistus = "";
+        if (arvaus.length() < 2 && this.viivat.contains("_")) {
+            if (this.viivat.contains(arvaus)) {
+                System.out.println("Olet jo arvannut kirjaimen " + arvaus + "!");
+            } else for (int i = 0; i < this.arvattavaSana.length(); i++) {
+                if (this.arvattavaSana.charAt(i) == arvaus.toUpperCase().charAt(0)) {
+                    tarkistus += arvaus.toUpperCase().charAt(0);
+                } else if (this.viivat.charAt(i) != '_') {
+                    tarkistus += this.arvattavaSana.charAt(i);
+                } else {
+                    tarkistus += "_";
+                }
+            }
+
+            if (this.viivat.toUpperCase().equals(tarkistus.toUpperCase())) {
+                this.laskuri++;
+                Tulosta.tulosta();
+            } else {
+                this.viivat = tarkistus.toUpperCase();
+            }
+
+            System.out.println(this.viivat);
+
+            if (this.viivat.equals(this.arvattavaSana)) {
+                System.out.println("\nOikein! Arvasit sanan " + this.arvattavaSana + "!");
+                this.sanaArvattu = true;
+            }
+        } else if (arvaus.length() > 1) {
+            System.out.println("Arvaa ainoastaan yksittäisiä kirjaimia!");
+        } else {
+            System.out.println("\n");
+        }
+    }
+
+    public void sanaViivoina() {
+        System.out.println(this.viivat);
+    }
+
+    public String getSanaViivoina() {
+        return this.viivat;
+    }
+
+    public int getVaaratArvaukset() {
+        return this.laskuri;
+    }
+}
+// Nice code bro
+// thanks bro
+
+import java.util.Scanner;
+
+public class Kayttoliittyma {
+    static Peli peli;//tämä muutettu static
+    static Sanalista sanalista;
+    private Scanner lukija;
+
+    public Kayttoliittyma(Peli peli, Scanner lukija) {
+        sanalista = new Sanalista();
+        this.peli = peli;
+        this.lukija = lukija;
+    }
+
+    public void kaynnista() {
+        System.out.println("Tervetuloa pelaamaan hirsipuupeliä!");
+        System.out.println("Komennot:");
+        System.out.println("lisaa - Lisää sanan, tyhjä lopettaa");
+        System.out.println("aloita - aloittaa pelin");
+        System.out.println("uusinta - aloittaa uuden pelin");
+        System.out.println("lopeta - Lopettaa pelin");
+
+        while (true) {
+
+            String syote = lukija.nextLine();
+            if (syote.equals("lopeta")) {
+                System.out.println("Peli lopetettu.");
+                break;
+            }
+            if (syote.equals("lisaa")) {
+                while (true) {
+                    System.out.println("");
+                    System.out.println("Lisättävä sana: (tyhjä lopettaa lisäys-vaiheen)");
+                    String lisattava = lukija.nextLine();
+
+                    if (lisattava.equals("")) {
+                        break;
+                    }
+                    sanalista.lisaa(lisattava);
+                }
+
+            }
+            if (syote.equals("lista")) {
+                sanalista.tulostaLista();
+                System.out.println("");
+            }
+            if (syote.equals("aloita")) {
+                if (sanalista.listallaSanoja()) {
+                    peli.aloitaPeli();
+                    System.out.println("Komennot:");
+                    System.out.println("lisaa - Lisää sanan, tyhjä lopettaa");
+                    System.out.println("sekoita - Sekoittaa sanat");
+                    System.out.println("aloita - aloittaa pelin");
+                    System.out.println("uusinta - aloittaa uuden pelin");
+                    System.out.println("lopeta - Lopettaa pelin");
+                    continue;
+                }
+            }
+            if (syote.equals("uusinta")) {
+                kaynnista();
+                sanalista.tyhjenna();
+                System.out.println("");
+            }
+        }
+    }
+}
+// Kaikki scanner asiat tänne
+
+public class Tulosta {
+    private int laskuri;
+    private static Peli peli;
+
+  /*  public Tulosta (Peli peli){
+        this.laskuri = laskuri;
+        this.peli = peli;
+
+    }*/
+
+    //public void tulosta(int laskuri){
+    public static void tulosta() {
+        if (Kayttoliittyma.peli.getVaaratArvaukset() == 1) {
+            System.out.println("Arvasit väärin! Yritä uudelleen!");
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println("__|__");
+        } else if (Kayttoliittyma.peli.getVaaratArvaukset() == 2){
+            System.out.println("Arvasit väärin! Yritä uudelleen!");
+            System.out.println();
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("__|__");
+        } else if (Kayttoliittyma.peli.getVaaratArvaukset() == 3){
+            System.out.println("Arvasit väärin! Yritä uudelleen!");
+            System.out.println("  __________");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("__|__");
+        } else if (Kayttoliittyma.peli.getVaaratArvaukset() == 4){
+            System.out.println("Arvasit väärin! Yritä uudelleen!");
+            System.out.println("  __________");
+            System.out.println("  |        |");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("__|__");
+        } else if (Kayttoliittyma.peli.getVaaratArvaukset() == 5){
+            System.out.println("Arvasit väärin! Yritä uudelleen!");
+            System.out.println("  __________");
+            System.out.println("  |       _|_");
+            System.out.println("  |      |___|");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("__|__");
+        } else if (Kayttoliittyma.peli.getVaaratArvaukset() == 6){
+            System.out.println("Arvasit väärin! Yritä uudelleen!");
+            System.out.println("  __________");
+            System.out.println("  |       _|_");
+            System.out.println("  |      |___|");
+            System.out.println("  |        |");
+            System.out.println("  |        |");
+            System.out.println("  |        |");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("__|__");
+        } else if (Kayttoliittyma.peli.getVaaratArvaukset() == 7){
+            System.out.println("Arvasit väärin! Yritä uudelleen!");
+            System.out.println("  __________");
+            System.out.println("  |       _|_");
+            System.out.println("  |      |___|");
+            System.out.println("  |       /| \\");
+            System.out.println("  |      / |  \\");
+            System.out.println("  |        |");
+            System.out.println("  |  ");
+            System.out.println("  |  ");
+            System.out.println("__|__");
+        } else if (Kayttoliittyma.peli.getVaaratArvaukset() == 8){
+            System.out.println("Hävisit!");
+            System.out.println("  __________");
+            System.out.println("  |       _|_");
+            System.out.println("  |      |___|");
+            System.out.println("  |       /| \\");
+            System.out.println("  |      / |  \\");
+            System.out.println("  |        |");
+            System.out.println("  |       / \\");
+            System.out.println("  |      /   \\");
+            System.out.println("__|__ ");
+            System.out.println();
+        }
+        
+    }
+}
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class Sanalista {
+    private ArrayList<String> sanalista;
+    private String arvattavaSana;
+    private Random random;
+
+    public Sanalista() {
+        this.sanalista = new ArrayList<>();
+        this.random = new Random();
+        this.arvattavaSana = "";
+    }
+
+    public void tulostaLista() {
+        for (int i = 0; i < this.sanalista.size(); i++) {
+            System.out.println(this.sanalista.get(i));
+        }
+    }
+
+    public boolean listallaSanoja() {
+        if (this.sanalista.size() >= 1) {
+            return true;
+        }
+
+        System.out.println("Listalla on oltava vähintään yksi sana!");
+        return false;
+    }
+
+    public void lisaa(String sana) {
+        this.sanalista.add(sana);
+    }
+
+    public void tyhjenna() {
+        this.sanalista.removeAll(this.sanalista);
+    }
+
+    public String arvoSana() {
+        if (listallaSanoja()) {
+            this.arvattavaSana = this.sanalista.get(random.nextInt(this.sanalista.size()));
+            return this.arvattavaSana.toUpperCase();
+        }
+
+        return this.arvattavaSana;
+    }
+
+    public void tulostaSana() {
+        System.out.println(this.arvattavaSana);
+    }
+}
